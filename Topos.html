@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <title>Juego De Topos</title>
+    <style>
+    body {
+        background-image: url(https://media.istockphoto.com/id/486620678/es/vector/fondo-de-hierba.jpg?s=612x612&w=0&k=20&c=J20Yff_T3pgJsCCLBC4hteRsbXibP0cpwkomouKvMF0=);
+        background-size: cover;
+        font-family: "Shadows Into Light";
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .nickname {
+        text-align: center;
+        text-shadow: 2px 0px gray;
+        font-size: 25px;
+        color: black;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        padding: 20px;
+        border-radius: 12px;
+        width: 300px;
+        margin: 20px auto;
+    }
+
+    .labelNick {
+        font-family: "Shadows Into Light";
+        font-size: 12px;
+        text-shadow: 0 0 10px #ff5900;
+    }
+    
+    .nickname input {
+        width: 85%;
+        padding: 12px;
+        font-size: 14px;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        text-align: center;
+        font-family: "Shadows Into Light";
+        background: #9c9cb45d;
+        color: #241b1b;
+        box-shadow: inset 0 0 10px #00fbff;
+        transition: 0.3s ease;
+    }
+
+    .nickname input:focus {
+    box-shadow: 0 0 15px #00faff;
+    }
+
+    .botonUno {
+        width: 85%;
+        padding: 12px;
+        font-family: "Shadows Into Light";
+        font-size: 18px;
+        background: #00d9ff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        color: #000;
+        transition: 0.3s;
+        text-shadow: 0 0 5px #ffffffaa;
+    }
+
+    .botonUno:hover {
+        background: #00faff;
+        box-shadow: 0 0 15px #00faff, 0 0 35px #00faff77;
+        transform: scale(1.05);
+    }
+
+    .botonUno:active {
+        transform: scale(0.95);
+    }
+
+    h1 {
+        text-align: center;
+        text-shadow: 1px 1px black;
+        font-size: 50px;
+        color: rgb(48, 41, 41);
+    }
+
+    h2 {
+        text-align: center;
+        text-shadow: 1px 1px rgb(99, 38, 38);
+        font-size: 30px;
+        color: rgb(73, 47, 47);
+    }
+
+    h3 {
+        text-align: center;
+        text-shadow: 2px 0px gray;
+        font-size: 25px;
+        color: black;
+        font-weight: bold;
+    }
+
+    p {
+        text-align: center;
+        font-size: 13px;
+        color: rgb(8, 22, 34);
+    }
+
+    .cuadrilla {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-content: center;
+        width:  300px;
+        height: 240px;
+        margin: 20px auto;
+    } 
+
+    .cuadro {
+        border-style: ridge;
+        border-color: beige;
+        width:  60px;
+        height: 50px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .topo {
+        background-image: url(https://i.pinimg.com/736x/86/e7/d1/86e7d1a74cb43350713cabe4c6118f0b.jpg);
+        background-size: cover;
+        object-position: center;
+    }
+    
+    </style>
+</head>
+<body>
+ 
+<h1>¡Golpea al Topo!</h1>
+<h2>Cuantos TOPOS puedes golpear en 30 segundos</h2>
+
+<div class="nickname">
+    <label for="nombreJugador">Nombre del Jugador</label>
+    <input id="nombreJugador" type="text" placeholder="Tu nombre">
+    <button id="botonJuegoN" class="botonUno">Iniciar Juego</button>  
+</div>
+
+<h3>Tiempo</h3>
+<h3 id="tiempo">30</h3>
+<h3>Puntaje</h3>
+<h3 id="puntaje">0</h3>
+
+<div class="cuadrilla">
+    <div class="cuadro" id="1"></div>
+    <div class="cuadro" id="2"></div>
+    <div class="cuadro" id="3"></div>
+    <div class="cuadro" id="4"></div>
+    <div class="cuadro" id="5"></div>
+    <div class="cuadro" id="6"></div>
+    <div class="cuadro" id="7"></div>
+    <div class="cuadro" id="8"></div>
+    <div class="cuadro" id="9"></div>
+    <div class="cuadro" id="10"></div>
+    <div class="cuadro" id="11"></div>
+    <div class="cuadro" id="12"></div>
+    <div class="cuadro" id="13"></div>
+    <div class="cuadro" id="14"></div>
+    <div class="cuadro" id="15"></div>
+    <div class="cuadro" id="16"></div>
+</div>
+
+<script>
+    const botonJuegoN = document.getElementById("botonJuegoN");
+    const inputNombre = document.getElementById("nombreJugador");
+
+    const puntaje = document.getElementById("puntaje");
+    const cuadro = document.querySelectorAll(".cuadro");
+    const tiempoFaltante = document.querySelector("#tiempo");
+
+    let resultado = 0;
+    let tiempoInicial = 30;
+    let puestoTopo;
+    let aparecerTopo;
+    let tiempo;
+
+    function topoRandom() {
+        cuadro.forEach((ocultarTopo) => {
+            ocultarTopo.classList.remove("topo");
+        });
+
+        let ubicacionTopo = cuadro[Math.floor(Math.random() * 16)];
+        ubicacionTopo.classList.add("topo");
+        puestoTopo = ubicacionTopo.id;
+    }
+
+    cuadro.forEach((golpeTopo) => {
+        golpeTopo.addEventListener("click", () => {
+            if (golpeTopo.id == puestoTopo) {
+                resultado++;
+                puntaje.textContent = resultado;
+                puestoTopo = null;
+            }
+        });
+    });
+
+    function moverTopo() {
+        aparecerTopo = setInterval(topoRandom, 700);
+    }
+
+    function conteoSeg() {
+        tiempoInicial--;
+        tiempoFaltante.textContent = tiempoInicial;
+        if (tiempoInicial === 0) {
+            clearInterval(tiempo);
+            clearInterval(aparecerTopo);
+            if (resultado < 10) {
+                alert("Se ha acabado el Tiempo. Golpeaste solo " + resultado + " topos 😒. ¡Inténtalo de nuevo!");
+                } else if (resultado >= 10 && resultado <= 29) {
+                    alert("Excelente, has golpeado " + resultado + " topos! 👏");
+                } 
+                else if (resultado >= 30) {
+                    alert("¡Modo Leyenda 🏆! Has golpeado " + resultado + " topos!");
+                }
+            }
+        }
+
+        botonJuegoN.addEventListener("click", () => {
+        const nombreJugador = inputNombre.value.trim();
+
+        if (nombreJugador === "") {
+            alert("Por favor, escribe tu nombre antes de comenzar.");
+            return;
+        }
+
+        alert(nombreJugador + ", ¡el juego ha comenzado!");
+
+        resultado = 0;
+        puntaje.textContent = resultado;
+        tiempoInicial = 30;
+        tiempoFaltante.textContent = tiempoInicial;
+
+        clearInterval(tiempo);
+        clearInterval(aparecerTopo);
+
+        moverTopo();
+        tiempo = setInterval(conteoSeg, 1000);
+    });
+</script>
+<footer>
+    <p>Este juego es diseñado para la materia de Jeison</p>
+    <p>Nicolas Martinez Valencia 10-1</p>
+</footer>
+</body>
+</html>
